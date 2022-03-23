@@ -18,10 +18,10 @@ elastic-jupyter-operator provides elastic Jupyter notebook services with these f
 - Autoscale Jupyter kernels when the kernels are not used within the given time frame to increase the resource utilization.
 - Customize the kernel configuration in runtime without restarting the notebook.
 
-<p align="center"><img src="docs/images/elastic.png" width="600"></p>
+<p align="center"><img src="docs/images/elastic.jpeg" width="600"></p>
 Figure 1. elastic-jupyter-operator
 
-<p align="center"><img src="docs/images/jupyter.png" width="600"></p>
+<p align="center"><img src="docs/images/jupyter.jpeg" width="600"></p>
 Figure 2. Other Jupyter on Kubernetes solutions
 
 ## Deploy
@@ -49,6 +49,13 @@ There are three pods running in the demo:
 - `jovyan-fd191444-b08c-4668-ba4e-3748a54a0ac1-5789574d66-tb5cm` is the remote kernel
 
 The kernel will be deleted if the notebook does not use it in 10 mins. And it will be recreated if there is any new run in the notebook.
+
+## Community
+
+Please join [![Discord][discord-badge]][discord-url]
+
+[discord-badge]: https://img.shields.io/discord/913359799058587658?logo=Discord&style=flat-square
+[discord-url]: https://discord.gg/NJsd4guhPM
 
 ## Design
 

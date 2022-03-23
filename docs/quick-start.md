@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: notebook
-          image: jupyter/base-notebook:python-3.8.6
+          image: jupyter/base-notebook:python-3.9.7
           command: ["tini", "-g", "--", "start-notebook.sh"]
 
 $ kubectl apply -f ./examples/simple-deployments/kubeflow.tkestack.io_v1alpha1_jupyternotebook.yaml
@@ -29,7 +29,7 @@ $ kubectl port-forward deploy/jupyternotebook-simple 8888:8888
 
 Then you can open the URL `http://127.0.0.1:8888/` to get the simple Jupyter notebook instance. The deployment follows the architecture below:
 
-<p align="center"><img src="./images/kubeflow.png" width="300"></p>
+<p align="center"><img src="./images/kubeflow.jpeg" width="300"></p>
 
 
 ## Elastic deployment
@@ -56,7 +56,7 @@ metadata:
   name: jupytergateway-elastic
 spec:
   cullIdleTimeout: 3600
-  image: ccr.ccs.tencentyun.com/kubeflow-oteam/enterprise-gateway:2.5.0
+  image: ghcr.io/skai-x/enterprise-gateway:2.6.0
 
 $ kubectl apply -f ./examples/elastic/kubeflow.tkestack.io_v1alpha1_jupyternotebook.yaml
 $ kubectl apply -f ./examples/elastic/kubeflow.tkestack.io_v1alpha1_jupytergateway.yaml
@@ -87,7 +87,7 @@ metadata:
 spec:
   language: Python
   displayName: "Python on Kubernetes as a JupyterKernelSpec"
-  image: ccr.ccs.tencentyun.com/kubeflow-oteam/jupyter-kernel-py:2.5.0
+  image: ghcr.io/skai-x/jupyter-kernel-py:2.6.0
   className: enterprise_gateway.services.processproxies.kubeflow.KubeflowProcessProxy
   # Use the template defined in JupyterKernelTemplate CR.
   template:
@@ -135,7 +135,7 @@ spec:
   cullIdleTimeout: 10
   cullInterval: 10
   logLevel: DEBUG
-  image: ccr.ccs.tencentyun.com/kubeflow-oteam/enterprise-gateway:dev
+  image: ghcr.io/skai-x/enterprise-gateway:2.6.0
   # Use the kernel which is defined in JupyterKernelSpec CR.
   kernels: 
   - python-kubernetes

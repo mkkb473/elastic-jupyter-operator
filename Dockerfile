@@ -6,6 +6,7 @@ WORKDIR /workspace
 COPY go.mod go.mod
 COPY go.sum go.sum
 
+ENV GOPROXY https://goproxy.cn,direct
 # Download libs first to use docker buildx caching
 RUN go mod download
 RUN go mod verify
@@ -21,8 +22,8 @@ RUN CGO_ENABLED=0 go build -a -o elastic-jupyter-operator main.go
 
 # Use distroless as minimal base image to package the elastic-jupyter-operator binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
-FROM gcr.io/distroless/static:nonroot
-
+FROM oamdev/gcr.io-distroless-static:nonroot
+                                                                                                                                                                                                                                                                                
 LABEL org.opencontainers.image.source https://github.com/tkestack/elastic-jupyter-operator
 
 WORKDIR /

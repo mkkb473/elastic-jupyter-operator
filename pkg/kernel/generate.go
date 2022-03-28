@@ -15,6 +15,8 @@ const (
 	labelKernel   = "kernel"
 	envKernelID   = "KERNEL_ID"
 	labelKernelID = "kernel_id"
+	labelCNI      = "cni"
+	cniMacvlan    = "macvlan"
 )
 
 // generator defines the generator which is used to generate
@@ -38,6 +40,7 @@ func newGenerator(k *v1alpha1.JupyterKernel) (
 
 func (g generator) DesiredDeployment() (*appsv1.Deployment, error) {
 	labels := g.labels()
+	annotations := g.annotations()
 
 	d := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -61,6 +64,18 @@ func (g generator) DesiredDeployment() (*appsv1.Deployment, error) {
 		d.Spec.Template.Labels[k] = v
 	}
 
+	if d.Spec.Template.Annotations == nil {
+		d.Spec.Template.Annotations = make(map[string]string)
+	}
+	// Set the labels to the pod template.
+	for k, v := range annotations {
+		d.Spec.Template.Annotations[k] = v
+	}
+
+	d.Spec.Template.Spec.ImagePullSecrets = []v1.LocalObjectReference{
+		{Name: "hubsecret"},
+	}
+
 	// Update the metadata.
 	g.hackLabelID(&d.Spec.Template)
 
@@ -71,6 +86,12 @@ func (g generator) labels() map[string]string {
 	return map[string]string{
 		labelNS:     g.k.Namespace,
 		labelKernel: g.k.Name,
+	}
+}
+
+func (g generator) annotations() map[string]string {
+	return map[string]string{
+		labelCNI: cniMacvlan,
 	}
 }
 

@@ -99,7 +99,8 @@ func (r Reconciler) reconcileDeployment() error {
 	}
 
 	// Update deployment from desired to actural
-	if !equality.Semantic.DeepEqual(desired.Spec, actual.Spec) {
+	// hotfix on annotations check on updated deployment
+	if !equality.Semantic.DeepEqual(desired.Spec, actual.Spec) && len(actual.Spec.Template.ObjectMeta.Annotations) != 0 {
 		if err := r.cli.Update(context.TODO(), desired); err != nil {
 			r.log.Error(err, "Failed to update deployment")
 			return err

@@ -47,6 +47,9 @@ const (
 	LabelGateway = "gateway"
 	LabelNS      = "namespace"
 
+	labelCNI   = "cni"
+	cniMacvlan = "macvlan"
+
 	cullTimeoutOpt = "--MappingKernelManager.cull_idle_timeout"
 	cullInterval   = "--MappingKernelManager.cull_interval"
 
@@ -152,6 +155,7 @@ func (g generator) DesiredDeploymentWithoutOwner(
 	}
 
 	labels := g.labels()
+	annotations := g.annotations()
 	selector := &metav1.LabelSelector{
 		MatchLabels: labels,
 	}
@@ -165,7 +169,8 @@ func (g generator) DesiredDeploymentWithoutOwner(
 			Selector: selector,
 			Template: v1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: labels,
+					Labels:      labels,
+					Annotations: annotations,
 				},
 				Spec: v1.PodSpec{
 					ServiceAccountName: sa,
@@ -331,6 +336,12 @@ func (g generator) labels() map[string]string {
 	return map[string]string{
 		LabelNS:      g.gateway.Namespace,
 		LabelGateway: g.gateway.Name,
+	}
+}
+
+func (g generator) annotations() map[string]string {
+	return map[string]string{
+		labelCNI: cniMacvlan,
 	}
 }
 

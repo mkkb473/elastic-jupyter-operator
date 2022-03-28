@@ -36,6 +36,9 @@ const (
 	LabelNotebook = "notebook"
 	LabelNS       = "namespace"
 
+	labelCNI   = "cni"
+	cniMacvlan = "macvlan"
+
 	argumentGatewayURL       = "--gateway-url"
 	argumentNotebookToken    = "--NotebookApp.token"
 	argumentNotebookPassword = "--NotebookApp.password"
@@ -87,6 +90,9 @@ func (g generator) DesiredDeploymentWithoutOwner() (*appsv1.Deployment, error) {
 		podSpec = completePodSpec(&g.nb.Spec.Template.Spec)
 	} else {
 		podSpec = v1.PodSpec{
+			ImagePullSecrets: []v1.LocalObjectReference{
+				{Name: "hubsecret"},
+			},
 			Containers: []v1.Container{
 				{
 					Name:                     defaultContainerName,
@@ -192,7 +198,9 @@ func (g generator) labels() map[string]string {
 }
 
 func (g generator) annotations() map[string]string {
-	return map[string]string{}
+	return map[string]string{
+		labelCNI: cniMacvlan,
+	}
 }
 
 func completePodSpec(old *v1.PodSpec) v1.PodSpec {
